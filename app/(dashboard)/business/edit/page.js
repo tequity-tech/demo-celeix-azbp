@@ -68,10 +68,17 @@ export default function EditBusinessPage() {
         const categoryData = await categoryRes.json();
         const allCategories = categoryData.categories || [];
 
-        // Find the category that matches
-        const primaryCategory = allCategories.find(c =>
-          biz.category_names?.includes(c.name)
-        );
+        // Find the category by slug (more reliable than name substring matching)
+        // primary_category_slug is returned by the API
+        let primaryCategory = null;
+        if (biz.primary_category_slug) {
+          primaryCategory = allCategories.find(c => c.slug === biz.primary_category_slug);
+        }
+        // Fallback: exact match on category name from comma-separated list
+        if (!primaryCategory && biz.category_names) {
+          const categoryNameList = biz.category_names.split(', ').map(n => n.trim());
+          primaryCategory = allCategories.find(c => categoryNameList.includes(c.name));
+        }
 
         reset({
           name: biz.name || '',

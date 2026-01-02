@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { User, Mail, Lock, Bell, Shield, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -15,8 +15,16 @@ export default function SettingsPage() {
   const [error, setError] = useState('');
 
   // Profile form state
-  const [name, setName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  // Sync form state when user data loads
+  useEffect(() => {
+    if (user) {
+      setName(user.name || '');
+      setEmail(user.email || '');
+    }
+  }, [user]);
 
   // Password form state
   const [currentPassword, setCurrentPassword] = useState('');
@@ -30,7 +38,17 @@ export default function SettingsPage() {
     setSuccess('');
 
     try {
-      // TODO: Implement profile update API
+      const res = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to update profile');
+      }
+
       setSuccess('Profile updated successfully!');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
@@ -56,7 +74,17 @@ export default function SettingsPage() {
     setSuccess('');
 
     try {
-      // TODO: Implement password change API
+      const res = await fetch('/api/auth/password', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to change password');
+      }
+
       setSuccess('Password changed successfully!');
       setCurrentPassword('');
       setNewPassword('');

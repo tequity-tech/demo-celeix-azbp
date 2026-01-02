@@ -10,7 +10,10 @@ import { CITY_COORDINATES, PHOENIX_CENTER } from '@/lib/constants/arizona-cities
  * Returns null if valid, error message if invalid
  */
 function validateUrl(url) {
-  if (!url || url.trim() === '') return null; // Empty is OK
+  // Handle non-string inputs
+  if (url === null || url === undefined) return null;
+  if (typeof url !== 'string') return 'URL must be a string';
+  if (url.trim() === '') return null; // Empty string is OK
 
   try {
     const parsed = new URL(url);

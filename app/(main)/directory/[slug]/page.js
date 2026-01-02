@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Container } from '@/components/layout';
 import { Button, Badge, Card, CardContent } from '@/components/ui';
+import { TrackBusinessView, TrackedPhoneLink, TrackedEmailLink, TrackedWebsiteLink } from '@/components/analytics';
 import db from '@/lib/db';
 
 // Placeholder images for businesses without uploaded images
@@ -152,6 +153,9 @@ export default async function BusinessPage({ params }) {
 
   return (
     <div className="min-h-screen bg-[var(--color-cream-100)]">
+      {/* Analytics Tracking */}
+      <TrackBusinessView businessId={business.id} businessName={business.name} />
+
       {/* Hero/Cover Section */}
       <div className="relative h-64 md:h-80 bg-[var(--color-hero)]">
         <img
@@ -294,33 +298,34 @@ export default async function BusinessPage({ params }) {
                 <h2 className="text-lg font-semibold text-[var(--color-neutral-900)] mb-4">Contact</h2>
                 <div className="space-y-4">
                   {business.phone && (
-                    <a
-                      href={`tel:${business.phone}`}
+                    <TrackedPhoneLink
+                      businessId={business.id}
+                      phone={business.phone}
                       className="flex items-center gap-3 text-[var(--color-neutral-700)] hover:text-[var(--color-primary-500)] transition-colors"
                     >
                       <Phone className="w-5 h-5 text-[var(--color-primary-500)]" />
                       <span>{business.phone}</span>
-                    </a>
+                    </TrackedPhoneLink>
                   )}
                   {business.email && (
-                    <a
-                      href={`mailto:${business.email}`}
+                    <TrackedEmailLink
+                      businessId={business.id}
+                      email={business.email}
                       className="flex items-center gap-3 text-[var(--color-neutral-700)] hover:text-[var(--color-primary-500)] transition-colors"
                     >
                       <Mail className="w-5 h-5 text-[var(--color-primary-500)]" />
                       <span>{business.email}</span>
-                    </a>
+                    </TrackedEmailLink>
                   )}
                   {sanitizeUrl(business.website) && (
-                    <a
-                      href={sanitizeUrl(business.website)}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <TrackedWebsiteLink
+                      businessId={business.id}
+                      url={sanitizeUrl(business.website)}
                       className="flex items-center gap-3 text-[var(--color-neutral-700)] hover:text-[var(--color-primary-500)] transition-colors"
                     >
                       <Globe className="w-5 h-5 text-[var(--color-primary-500)]" />
                       <span>Visit Website</span>
-                    </a>
+                    </TrackedWebsiteLink>
                   )}
                 </div>
 

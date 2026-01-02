@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Spinner } from '@/components/ui';
 import {
   LayoutDashboard, Store, Settings, LogOut, Menu, X, ChevronLeft,
-  Shield, Users, ClipboardList
+  Shield, Users, ClipboardList, BarChart3
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
@@ -19,6 +19,7 @@ const navItems = [
 
 const adminNavItems = [
   { name: 'Admin Panel', href: '/admin', icon: Shield },
+  { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   { name: 'Pending Approval', href: '/admin/pending', icon: ClipboardList },
   { name: 'All Businesses', href: '/admin/businesses', icon: Store },
 ];

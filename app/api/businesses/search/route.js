@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { nanoid } from 'nanoid';
 import db from '@/lib/db';
 
 export async function GET(request) {
@@ -68,6 +69,19 @@ export async function GET(request) {
     params.push(limit);
 
     const businesses = db.prepare(query).all(...params);
+
+    // Log search query for analytics
+    if (q || category || city) {
+      try {
+        db.prepare(`
+          INSERT INTO search_logs (id, query, category_id, city, results_count, created_at)
+          VALUES (?, ?, ?, ?, ?, datetime('now'))
+        `).run(nanoid(), q || null, category || null, city || null, businesses.length);
+      } catch (logError) {
+        // Don't fail the search if logging fails
+        console.error('Failed to log search:', logError);
+      }
+    }
 
     return NextResponse.json({ businesses });
   } catch (error) {

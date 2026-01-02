@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Card, CardContent, Spinner, Button } from '@/components/ui';
 import {
-  Shield, Store, Clock, CheckCircle, XCircle, Star, BadgeCheck, ArrowRight
+  Shield, Store, Clock, CheckCircle, XCircle, Star, BadgeCheck, ArrowRight, BarChart3
 } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -155,6 +155,28 @@ export default function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Quick Links */}
+      <div className="mb-8">
+        <Link href="/admin/analytics">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer bg-gradient-to-r from-[var(--color-primary-500)] to-[var(--color-primary-700)] text-white">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-lg bg-white/20">
+                    <BarChart3 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold">Analytics Dashboard</p>
+                    <p className="text-white/80 text-sm">View platform performance, traffic, and insights</p>
+                  </div>
+                </div>
+                <ArrowRight className="w-6 h-6 text-white/80" />
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
 
       {/* Pending Approvals Quick Access */}
