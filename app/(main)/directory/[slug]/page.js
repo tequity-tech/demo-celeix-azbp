@@ -151,26 +151,28 @@ export default async function BusinessPage({ params }) {
   const placeholderLogo = getPlaceholderImage(placeholderLogos, business.id);
 
   return (
-    <div className="pb-12">
+    <div className="min-h-screen bg-[var(--color-cream-100)]">
       {/* Hero/Cover Section */}
       <div className="relative h-64 md:h-80 bg-[var(--color-hero)]">
         <img
           src={coverImage?.url || placeholderCover}
           alt={business.name}
-          className="w-full h-full object-cover opacity-60"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20" />
 
         {/* Back button */}
-        <Container className="relative h-full">
-          <Link
-            href="/directory"
-            className="absolute top-6 left-4 sm:left-6 lg:left-8 inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Directory
-          </Link>
-        </Container>
+        <div className="absolute top-6 left-0 right-0">
+          <Container>
+            <Link
+              href="/directory"
+              className="inline-flex items-center gap-2 text-white hover:text-white/80 transition-colors bg-black/30 px-3 py-1.5 rounded-lg"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Directory
+            </Link>
+          </Container>
+        </div>
       </div>
 
       <Container>
@@ -219,8 +221,8 @@ export default async function BusinessPage({ params }) {
                 </p>
               )}
 
-              <div className="flex items-center gap-2 text-[var(--color-neutral-500)]">
-                <MapPin className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-[var(--color-neutral-600)]">
+                <MapPin className="w-4 h-4 text-[var(--color-neutral-500)]" />
                 <span>{business.city}, {business.state}</span>
               </div>
             </div>
@@ -228,10 +230,10 @@ export default async function BusinessPage({ params }) {
             {/* Actions */}
             <div className="flex gap-2">
               <Button variant="outline" size="sm">
-                <Share2 className="w-4 h-4" />
+                <Share2 className="w-4 h-4 text-[var(--color-neutral-600)]" />
               </Button>
               <Button variant="outline" size="sm">
-                <Heart className="w-4 h-4" />
+                <Heart className="w-4 h-4 text-[var(--color-neutral-600)]" />
               </Button>
             </div>
           </div>
@@ -292,18 +294,18 @@ export default async function BusinessPage({ params }) {
                   {business.phone && (
                     <a
                       href={`tel:${business.phone}`}
-                      className="flex items-center gap-3 text-[var(--color-neutral-600)] hover:text-[var(--color-primary-500)]"
+                      className="flex items-center gap-3 text-[var(--color-neutral-700)] hover:text-[var(--color-primary-500)] transition-colors"
                     >
-                      <Phone className="w-5 h-5" />
+                      <Phone className="w-5 h-5 text-[var(--color-primary-500)]" />
                       <span>{business.phone}</span>
                     </a>
                   )}
                   {business.email && (
                     <a
                       href={`mailto:${business.email}`}
-                      className="flex items-center gap-3 text-[var(--color-neutral-600)] hover:text-[var(--color-primary-500)]"
+                      className="flex items-center gap-3 text-[var(--color-neutral-700)] hover:text-[var(--color-primary-500)] transition-colors"
                     >
-                      <Mail className="w-5 h-5" />
+                      <Mail className="w-5 h-5 text-[var(--color-primary-500)]" />
                       <span>{business.email}</span>
                     </a>
                   )}
@@ -312,9 +314,9 @@ export default async function BusinessPage({ params }) {
                       href={sanitizeUrl(business.website)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-[var(--color-neutral-600)] hover:text-[var(--color-primary-500)]"
+                      className="flex items-center gap-3 text-[var(--color-neutral-700)] hover:text-[var(--color-primary-500)] transition-colors"
                     >
-                      <Globe className="w-5 h-5" />
+                      <Globe className="w-5 h-5 text-[var(--color-primary-500)]" />
                       <span>Visit Website</span>
                     </a>
                   )}
@@ -335,9 +337,9 @@ export default async function BusinessPage({ params }) {
                             href={safeUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 rounded-lg bg-[var(--color-neutral-100)] hover:bg-[var(--color-primary-100)] transition-colors"
+                            className="p-2.5 rounded-lg bg-[var(--color-neutral-100)] hover:bg-[var(--color-primary-100)] transition-colors"
                           >
-                            <Icon className="w-5 h-5 text-[var(--color-neutral-600)]" />
+                            <Icon className="w-5 h-5 text-[var(--color-neutral-700)]" />
                           </a>
                         );
                       })}
@@ -352,20 +354,20 @@ export default async function BusinessPage({ params }) {
               <Card>
                 <CardContent className="p-6">
                   <h2 className="text-lg font-semibold text-[var(--color-neutral-900)] mb-4">Location</h2>
-                  <div className="flex items-start gap-3 text-[var(--color-neutral-600)]">
-                    <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                    <div>
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0 text-[var(--color-primary-500)]" />
+                    <div className="text-[var(--color-neutral-700)]">
                       {business.address_line1 && <p>{business.address_line1}</p>}
                       {business.address_line2 && <p>{business.address_line2}</p>}
                       <p>{business.city}, {business.state} {business.zip_code}</p>
                     </div>
                   </div>
                   {/* Map placeholder */}
-                  <div className="mt-4 rounded-lg overflow-hidden">
+                  <div className="mt-4 rounded-lg overflow-hidden border border-[var(--color-neutral-200)]">
                     <img
                       src={`https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400&h=200&fit=crop`}
                       alt="Map location"
-                      className="w-full h-32 object-cover opacity-80"
+                      className="w-full h-32 object-cover"
                     />
                   </div>
                 </CardContent>
@@ -376,15 +378,15 @@ export default async function BusinessPage({ params }) {
             {hours && (
               <Card>
                 <CardContent className="p-6">
-                  <h2 className="text-lg font-semibold text-[var(--color-neutral-900)] mb-4">
-                    <Clock className="w-5 h-5 inline mr-2" />
+                  <h2 className="text-lg font-semibold text-[var(--color-neutral-900)] mb-4 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-[var(--color-primary-500)]" />
                     Business Hours
                   </h2>
                   <div className="space-y-2 text-sm">
                     {Object.entries(hours).map(([day, time]) => (
-                      <div key={day} className="flex justify-between">
-                        <span className="text-[var(--color-neutral-600)] capitalize">{day}</span>
-                        <span className="text-[var(--color-neutral-900)]">{time || 'Closed'}</span>
+                      <div key={day} className="flex justify-between py-1">
+                        <span className="text-[var(--color-neutral-600)] capitalize font-medium">{day}</span>
+                        <span className="text-[var(--color-neutral-800)]">{time || 'Closed'}</span>
                       </div>
                     ))}
                   </div>
@@ -394,6 +396,9 @@ export default async function BusinessPage({ params }) {
           </div>
         </div>
       </Container>
+
+      {/* Bottom spacing */}
+      <div className="h-12" />
     </div>
   );
 }

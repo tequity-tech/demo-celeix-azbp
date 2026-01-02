@@ -320,3 +320,140 @@ export async function POST(request) {
     );
   }
 }
+
+export async function PUT(request) {
+  try {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const {
+      id,
+      name,
+      description,
+      shortDescription,
+      email,
+      phone,
+      website,
+      addressLine1,
+      addressLine2,
+      city,
+      zipCode,
+      categoryIds = [],
+    } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: 'Business ID is required' }, { status: 400 });
+    }
+
+    // Verify ownership
+    const existing = db.prepare('SELECT * FROM businesses WHERE id = ?').get(id);
+    if (!existing) {
+      return NextResponse.json({ error: 'Business not found' }, { status: 404 });
+    }
+    if (existing.owner_id !== user.id && user.role !== 'admin') {
+      return NextResponse.json({ error: 'Not authorized to edit this business' }, { status: 403 });
+    }
+
+    // Validate URL
+    const websiteError = validateUrl(website);
+    if (websiteError) {
+      return NextResponse.json({ error: `Website: ${websiteError}` }, { status: 400 });
+    }
+
+    // Update coordinates if city changed
+    let finalLat = existing.latitude;
+    let finalLng = existing.longitude;
+    if (city && city !== existing.city) {
+      const coords = getCityCoordinates(city);
+      finalLat = coords.lat;
+      finalLng = coords.lng;
+    }
+
+    // Update business - use existing values for any undefined/null fields
+    const updateData = {
+      name: name || existing.name,
+      description: description !== undefined ? description : existing.description,
+      short_description: shortDescription !== undefined ? shortDescription : existing.short_description,
+      email: email !== undefined ? email : existing.email,
+      phone: phone !== undefined ? phone : existing.phone,
+      website: website !== undefined ? website : existing.website,
+      address_line1: addressLine1 !== undefined ? addressLine1 : existing.address_line1,
+      address_line2: addressLine2 !== undefined ? addressLine2 : existing.address_line2,
+      city: city || existing.city,
+      zip_code: zipCode !== undefined ? zipCode : existing.zip_code,
+      latitude: finalLat,
+      longitude: finalLng,
+    };
+
+    db.prepare(`
+      UPDATE businesses SET
+        name = ?,
+        description = ?,
+        short_description = ?,
+        email = ?,
+        phone = ?,
+        website = ?,
+        address_line1 = ?,
+        address_line2 = ?,
+        city = ?,
+        zip_code = ?,
+        latitude = ?,
+        longitude = ?,
+        updated_at = datetime('now')
+      WHERE id = ?
+    `).run(
+      updateData.name,
+      updateData.description,
+      updateData.short_description,
+      updateData.email,
+      updateData.phone,
+      updateData.website,
+      updateData.address_line1,
+      updateData.address_line2,
+      updateData.city,
+      updateData.zip_code,
+      updateData.latitude,
+      updateData.longitude,
+      id
+    );
+
+    // Update categories if provided
+    if (categoryIds.length > 0) {
+      db.prepare('DELETE FROM business_categories WHERE business_id = ?').run(id);
+      const insertCategory = db.prepare(`
+        INSERT INTO business_categories (business_id, category_id, is_primary)
+        VALUES (?, ?, ?)
+      `);
+      categoryIds.forEach((categoryId, index) => {
+        insertCategory.run(id, categoryId, index === 0 ? 1 : 0);
+      });
+    }
+
+    // Update FTS index
+    const updated = db.prepare('SELECT rowid FROM businesses WHERE id = ?').get(id);
+    if (updated) {
+      db.prepare('DELETE FROM businesses_fts WHERE rowid = ?').run(updated.rowid);
+      db.prepare(`
+        INSERT INTO businesses_fts (rowid, name, description, short_description, city)
+        VALUES (?, ?, ?, ?, ?)
+      `).run(
+        updated.rowid,
+        updateData.name || '',
+        updateData.description || '',
+        updateData.short_description || '',
+        updateData.city || ''
+      );
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Update business error:', error);
+    return NextResponse.json(
+      { error: 'Failed to update business' },
+      { status: 500 }
+    );
+  }
+}

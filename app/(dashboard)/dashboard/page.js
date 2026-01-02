@@ -72,6 +72,40 @@ export default function DashboardPage() {
       ) : (
         /* Has Business - Show dashboard */
         <>
+          {/* Pending Approval Notice */}
+          {business.status === 'pending' && (
+            <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-amber-600 text-lg">⏳</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-amber-800">Pending Approval</h3>
+                  <p className="text-amber-700 text-sm mt-1">
+                    Your business listing is being reviewed. Once approved, it will appear in the public directory and map.
+                    This usually takes 1-2 business days.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {business.status === 'rejected' && (
+            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-red-600 text-lg">!</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-red-800">Listing Rejected</h3>
+                  <p className="text-red-700 text-sm mt-1">
+                    Your business listing was not approved. Please review and update your information, then contact support.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Business Status Card */}
           <Card className="mb-8">
             <CardContent className="p-6">
@@ -100,12 +134,19 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Link href={`/directory/${business.slug}`} target="_blank">
-                    <Button variant="outline" size="sm">
+                  {business.status === 'approved' ? (
+                    <Link href={`/directory/${business.slug}`} target="_blank">
+                      <Button variant="outline" size="sm">
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Listing
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button variant="outline" size="sm" disabled title="Listing must be approved to view">
                       <Eye className="w-4 h-4 mr-2" />
                       View Listing
                     </Button>
-                  </Link>
+                  )}
                   <Link href="/business/edit">
                     <Button size="sm">
                       Edit Business

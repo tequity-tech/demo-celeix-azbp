@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { X, Grid, List } from 'lucide-react';
 import { Container } from '@/components/layout';
@@ -8,7 +8,7 @@ import { BusinessCard } from '@/components/business';
 import { Button, Select, Spinner } from '@/components/ui';
 import { ARIZONA_CITIES } from '@/lib/constants/arizona-cities';
 
-export default function DirectoryPage() {
+function DirectoryContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -234,7 +234,7 @@ export default function DirectoryPage() {
                       className={`px-4 py-2 rounded-lg font-medium ${
                         pagination.page === page
                           ? 'bg-[var(--color-primary-500)] text-white'
-                          : 'bg-white border border-[var(--color-neutral-200)] hover:bg-[var(--color-neutral-50)]'
+                          : 'bg-white text-[var(--color-neutral-700)] border border-[var(--color-neutral-300)] hover:bg-[var(--color-neutral-100)] hover:border-[var(--color-neutral-400)]'
                       }`}
                     >
                       {page}
@@ -247,5 +247,17 @@ export default function DirectoryPage() {
         </Container>
       </section>
     </div>
+  );
+}
+
+export default function DirectoryPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[var(--color-cream-100)] flex items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    }>
+      <DirectoryContent />
+    </Suspense>
   );
 }

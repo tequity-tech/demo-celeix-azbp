@@ -100,12 +100,14 @@
   --color-cream: var(--color-cream-100);
 }
 
+/* Dark mode disabled - site is designed for light mode only
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #1c1917;
     --foreground: #fafaf9;
   }
 }
+*/
 
 body {
   background: var(--background);
