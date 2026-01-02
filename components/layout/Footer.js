@@ -36,32 +36,28 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-[var(--color-neutral-900)] text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+    <footer className="bg-[var(--color-hero)] text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--color-primary-400)] to-[var(--color-primary-600)] flex items-center justify-center">
-                <span className="text-white font-bold text-lg">AZ</span>
-              </div>
-              <div>
-                <span className="font-bold text-lg">Black Pages</span>
-                <span className="text-xs text-[var(--color-secondary-400)] block -mt-1">Arizona</span>
-              </div>
+            <Link href="/" className="inline-block">
+              <span className="text-2xl font-bold text-white tracking-tight">
+                AZ<span className="text-[var(--color-secondary-400)]">BP</span><span className="text-white/60">.</span>
+              </span>
             </Link>
-            <p className="mt-4 text-sm text-[var(--color-neutral-400)]">
+            <p className="mt-4 text-sm text-white/50 leading-relaxed">
               Connecting communities with Black-owned businesses across Arizona.
             </p>
-            <div className="flex gap-3 mt-4">
+            <div className="flex gap-2 mt-6">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.href}
-                  className="p-2 rounded-lg bg-[var(--color-neutral-800)] hover:bg-[var(--color-neutral-700)] transition-colors"
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
                   aria-label={social.name}
                 >
-                  <social.icon className="w-5 h-5" />
+                  <social.icon className="w-4 h-4" />
                 </a>
               ))}
             </div>
@@ -69,13 +65,13 @@ export function Footer() {
 
           {/* Directory Links */}
           <div>
-            <h3 className="font-semibold text-[var(--color-secondary-400)] mb-4">Directory</h3>
-            <ul className="space-y-2">
+            <h3 className="font-semibold text-white mb-4">Directory</h3>
+            <ul className="space-y-3">
               {footerLinks.directory.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[var(--color-neutral-400)] hover:text-white transition-colors"
+                    className="text-sm text-white/50 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -86,13 +82,13 @@ export function Footer() {
 
           {/* Business Links */}
           <div>
-            <h3 className="font-semibold text-[var(--color-secondary-400)] mb-4">For Business</h3>
-            <ul className="space-y-2">
+            <h3 className="font-semibold text-white mb-4">For Business</h3>
+            <ul className="space-y-3">
               {footerLinks.business.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[var(--color-neutral-400)] hover:text-white transition-colors"
+                    className="text-sm text-white/50 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -103,13 +99,13 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h3 className="font-semibold text-[var(--color-secondary-400)] mb-4">Company</h3>
-            <ul className="space-y-2">
+            <h3 className="font-semibold text-white mb-4">Company</h3>
+            <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[var(--color-neutral-400)] hover:text-white transition-colors"
+                    className="text-sm text-white/50 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -120,16 +116,16 @@ export function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="font-semibold text-[var(--color-secondary-400)] mb-4">Contact</h3>
+            <h3 className="font-semibold text-white mb-4">Contact</h3>
             <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-sm text-[var(--color-neutral-400)]">
+              <li className="flex items-center gap-2 text-sm text-white/50">
                 <MapPin className="w-4 h-4 flex-shrink-0" />
                 <span>Phoenix, Arizona</span>
               </li>
               <li>
                 <a
                   href="mailto:hello@azbp.com"
-                  className="flex items-center gap-2 text-sm text-[var(--color-neutral-400)] hover:text-white transition-colors"
+                  className="flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors"
                 >
                   <Mail className="w-4 h-4 flex-shrink-0" />
                   <span>hello@azbp.com</span>
@@ -140,9 +136,9 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-[var(--color-neutral-800)]">
+        <div className="mt-12 pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-[var(--color-neutral-500)]">
+            <p className="text-sm text-white/40">
               &copy; {new Date().getFullYear()} Arizona Black Pages. All rights reserved.
             </p>
             <div className="flex gap-6">
@@ -150,7 +146,7 @@ export function Footer() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-sm text-[var(--color-neutral-500)] hover:text-white transition-colors"
+                  className="text-sm text-white/40 hover:text-white transition-colors"
                 >
                   {link.name}
                 </Link>

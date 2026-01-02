@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
-import { Button, Input, Card, CardContent } from '@/components/ui';
+import { Button, Input } from '@/components/ui';
 import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
@@ -32,23 +32,71 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--color-neutral-50)] px-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-primary-500)] to-[var(--color-primary-700)] flex items-center justify-center">
-              <span className="text-white font-bold text-xl">AZ</span>
-            </div>
-            <div className="text-left">
-              <span className="font-bold text-2xl text-[var(--color-neutral-900)]">Black Pages</span>
-              <span className="text-sm text-[var(--color-primary-500)] block -mt-1">Arizona</span>
-            </div>
-          </Link>
+    <div className="min-h-screen flex">
+      {/* Left - Image Side */}
+      <div className="hidden lg:flex lg:w-1/2 bg-[var(--color-hero)] relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=1600&fit=crop"
+            alt="Business community"
+            className="w-full h-full object-cover opacity-30"
+          />
         </div>
+        <div className="relative z-10 flex flex-col justify-between p-12 text-white">
+          <Link href="/" className="inline-block">
+            <span className="text-2xl font-bold">
+              AZ<span className="text-[var(--color-secondary-400)]">BP</span><span className="text-white/60">.</span>
+            </span>
+          </Link>
 
-        <Card>
-          <CardContent className="p-8">
+          <div>
+            <h2 className="text-4xl font-bold mb-4">
+              Welcome back to the community
+            </h2>
+            <p className="text-white/70 text-lg max-w-md">
+              Connect with Black-owned businesses across Arizona and manage your listing.
+            </p>
+          </div>
+
+          <div className="flex gap-4">
+            <div className="w-16 h-16 rounded-xl overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=100&h=100&fit=crop"
+                alt="Business"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="w-16 h-16 rounded-xl overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=100&h=100&fit=crop"
+                alt="Business"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="w-16 h-16 rounded-xl overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=100&h=100&fit=crop"
+                alt="Business"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right - Form Side */}
+      <div className="flex-1 flex items-center justify-center p-8 bg-[var(--color-cream-100)]">
+        <div className="w-full max-w-md">
+          {/* Mobile Logo */}
+          <div className="lg:hidden text-center mb-8">
+            <Link href="/" className="inline-block">
+              <span className="text-2xl font-bold text-[var(--color-hero)]">
+                AZ<span className="text-[var(--color-secondary-500)]">BP</span><span className="text-[var(--color-neutral-400)]">.</span>
+              </span>
+            </Link>
+          </div>
+
+          <div className="bg-white rounded-2xl p-8 shadow-sm border border-[var(--color-neutral-200)]">
             <h1 className="text-2xl font-bold text-[var(--color-neutral-900)] mb-2">
               Welcome back
             </h1>
@@ -104,20 +152,20 @@ export default function LoginPage() {
             </form>
 
             <div className="mt-6 text-center">
-              <span className="text-[var(--color-neutral-500)]">Don't have an account? </span>
+              <span className="text-[var(--color-neutral-500)]">Don&apos;t have an account? </span>
               <Link href="/register" className="text-[var(--color-primary-500)] font-medium hover:underline">
                 Create one
               </Link>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        <p className="text-center mt-6 text-sm text-[var(--color-neutral-400)]">
-          By signing in, you agree to our{' '}
-          <Link href="/terms" className="underline hover:text-[var(--color-neutral-600)]">Terms</Link>
-          {' '}and{' '}
-          <Link href="/privacy" className="underline hover:text-[var(--color-neutral-600)]">Privacy Policy</Link>
-        </p>
+          <p className="text-center mt-6 text-sm text-[var(--color-neutral-400)]">
+            By signing in, you agree to our{' '}
+            <Link href="/terms" className="underline hover:text-[var(--color-neutral-600)]">Terms</Link>
+            {' '}and{' '}
+            <Link href="/privacy" className="underline hover:text-[var(--color-neutral-600)]">Privacy Policy</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

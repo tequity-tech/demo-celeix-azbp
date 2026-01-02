@@ -3,9 +3,16 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Mail, Lock, User, ArrowRight, Store } from 'lucide-react';
-import { Button, Input, Card, CardContent } from '@/components/ui';
+import { Mail, Lock, User, ArrowRight, Store, CheckCircle } from 'lucide-react';
+import { Button, Input } from '@/components/ui';
 import { useAuth } from '@/context/AuthContext';
+
+const benefits = [
+  'Get discovered by local customers',
+  'Manage your business profile',
+  'Connect with your community',
+  'Free basic listing',
+];
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -46,23 +53,82 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--color-neutral-50)] px-4 py-12">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-primary-500)] to-[var(--color-primary-700)] flex items-center justify-center">
-              <span className="text-white font-bold text-xl">AZ</span>
-            </div>
-            <div className="text-left">
-              <span className="font-bold text-2xl text-[var(--color-neutral-900)]">Black Pages</span>
-              <span className="text-sm text-[var(--color-primary-500)] block -mt-1">Arizona</span>
-            </div>
-          </Link>
+    <div className="min-h-screen flex">
+      {/* Left - Image Side */}
+      <div className="hidden lg:flex lg:w-1/2 bg-[var(--color-secondary-400)] relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1200&h=1600&fit=crop"
+            alt="Business owner"
+            className="w-full h-full object-cover opacity-20"
+          />
         </div>
+        <div className="relative z-10 flex flex-col justify-between p-12 text-[var(--color-hero)]">
+          <Link href="/" className="inline-block">
+            <span className="text-2xl font-bold">
+              AZ<span className="text-[var(--color-hero)]">BP</span><span className="text-[var(--color-hero)]/60">.</span>
+            </span>
+          </Link>
 
-        <Card>
-          <CardContent className="p-8">
+          <div>
+            <h2 className="text-4xl font-bold mb-4">
+              Join 500+ businesses growing with us
+            </h2>
+            <p className="text-[var(--color-hero)]/70 text-lg max-w-md mb-8">
+              List your business and connect with customers looking for Black-owned businesses in Arizona.
+            </p>
+
+            <ul className="space-y-3">
+              {benefits.map((benefit, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <div className="w-6 h-6 rounded-full bg-[var(--color-hero)] flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="w-4 h-4 text-[var(--color-secondary-400)]" />
+                  </div>
+                  <span className="text-[var(--color-hero)]/80">{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="flex gap-4">
+            <div className="w-16 h-16 rounded-xl overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=100&h=100&fit=crop"
+                alt="Restaurant"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="w-16 h-16 rounded-xl overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=100&h=100&fit=crop"
+                alt="Beauty"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="w-16 h-16 rounded-xl overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&h=100&fit=crop"
+                alt="Retail"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right - Form Side */}
+      <div className="flex-1 flex items-center justify-center p-8 bg-[var(--color-cream-100)]">
+        <div className="w-full max-w-md">
+          {/* Mobile Logo */}
+          <div className="lg:hidden text-center mb-8">
+            <Link href="/" className="inline-block">
+              <span className="text-2xl font-bold text-[var(--color-hero)]">
+                AZ<span className="text-[var(--color-secondary-500)]">BP</span><span className="text-[var(--color-neutral-400)]">.</span>
+              </span>
+            </Link>
+          </div>
+
+          <div className="bg-white rounded-2xl p-8 shadow-sm border border-[var(--color-neutral-200)]">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 rounded-lg bg-[var(--color-secondary-100)]">
                 <Store className="w-6 h-6 text-[var(--color-secondary-600)]" />
@@ -72,7 +138,7 @@ export default function RegisterPage() {
                   List Your Business
                 </h1>
                 <p className="text-[var(--color-neutral-500)] text-sm">
-                  Join Arizona's Black business community
+                  Join Arizona&apos;s Black business community
                 </p>
               </div>
             </div>
@@ -140,19 +206,15 @@ export default function RegisterPage() {
                 Sign in
               </Link>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-[var(--color-neutral-400)] mb-4">
-            By creating an account, you agree to our{' '}
-            <Link href="/terms" className="underline hover:text-[var(--color-neutral-600)]">Terms</Link>
-            {' '}and{' '}
-            <Link href="/privacy" className="underline hover:text-[var(--color-neutral-600)]">Privacy Policy</Link>
-          </p>
-          <div className="flex items-center justify-center gap-2 text-sm text-[var(--color-accent-600)]">
-            <span className="w-2 h-2 rounded-full bg-[var(--color-accent-500)]"></span>
-            <span>Free to list your business</span>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-[var(--color-neutral-400)] mb-4">
+              By creating an account, you agree to our{' '}
+              <Link href="/terms" className="underline hover:text-[var(--color-neutral-600)]">Terms</Link>
+              {' '}and{' '}
+              <Link href="/privacy" className="underline hover:text-[var(--color-neutral-600)]">Privacy Policy</Link>
+            </p>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { MapContainer as LeafletMap, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+// Leaflet CSS is imported globally in app/globals.css
 import Link from 'next/link';
 import { MapPin, BadgeCheck } from 'lucide-react';
 

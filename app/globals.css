@@ -1,17 +1,23 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 :root {
-  /* Primary - Rich Brown */
-  --color-primary-50: #fdf8f6;
-  --color-primary-100: #f2e8e5;
-  --color-primary-200: #eaddd7;
-  --color-primary-300: #e0cec7;
-  --color-primary-400: #d2bab0;
-  --color-primary-500: #a67c52;
-  --color-primary-600: #8b5e3c;
-  --color-primary-700: #6d4c41;
-  --color-primary-800: #5d4037;
-  --color-primary-900: #4e342e;
+  /* Hero - Dark Navy */
+  --color-hero: #1a1a2e;
+  --color-hero-light: #252542;
+  --color-hero-dark: #12121f;
+
+  /* Primary - Coral/Orange (CTAs) */
+  --color-primary-50: #fff5f2;
+  --color-primary-100: #ffe8e1;
+  --color-primary-200: #ffd0c3;
+  --color-primary-300: #ffb09a;
+  --color-primary-400: #ff8b6a;
+  --color-primary-500: #ff6b35;
+  --color-primary-600: #e85a28;
+  --color-primary-700: #c44a20;
+  --color-primary-800: #a03d1b;
+  --color-primary-900: #7d3016;
 
   /* Secondary - Warm Gold */
   --color-secondary-50: #fffdf7;
@@ -19,13 +25,13 @@
   --color-secondary-200: #fce9a6;
   --color-secondary-300: #f9d56e;
   --color-secondary-400: #f5c236;
-  --color-secondary-500: #d4a528;
-  --color-secondary-600: #b8860b;
-  --color-secondary-700: #9a6f09;
-  --color-secondary-800: #7d5907;
+  --color-secondary-500: #e6b325;
+  --color-secondary-600: #c9971d;
+  --color-secondary-700: #a67b18;
+  --color-secondary-800: #836013;
   --color-secondary-900: #614405;
 
-  /* Accent - Deep Green */
+  /* Accent - Deep Green (Verified/Success) */
   --color-accent-50: #f0f7f4;
   --color-accent-100: #d6ebe2;
   --color-accent-200: #a8d5bf;
@@ -36,6 +42,14 @@
   --color-accent-700: #174432;
   --color-accent-800: #103324;
   --color-accent-900: #092216;
+
+  /* Cream - Light Section Background */
+  --color-cream-50: #fefdfb;
+  --color-cream-100: #fdf8f0;
+  --color-cream-200: #f5efe3;
+  --color-cream-300: #ede5d6;
+  --color-cream-400: #e0d5c3;
+  --color-cream-500: #c9bda8;
 
   /* Neutrals - Warm Grays */
   --color-neutral-50: #fafaf9;
@@ -56,7 +70,7 @@
   --color-info: #3b82f6;
 
   /* Background */
-  --background: #fafaf9;
+  --background: #fefdfb;
   --foreground: #1c1917;
 }
 
@@ -67,6 +81,10 @@
   --font-mono: var(--font-geist-mono);
 
   /* Custom colors for Tailwind */
+  --color-hero: var(--color-hero);
+  --color-hero-light: var(--color-hero-light);
+  --color-hero-dark: var(--color-hero-dark);
+
   --color-primary: var(--color-primary-500);
   --color-primary-light: var(--color-primary-300);
   --color-primary-dark: var(--color-primary-700);
@@ -78,6 +96,8 @@
   --color-accent: var(--color-accent-500);
   --color-accent-light: var(--color-accent-300);
   --color-accent-dark: var(--color-accent-700);
+
+  --color-cream: var(--color-cream-100);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -126,4 +146,33 @@ body {
 .leaflet-popup-content-wrapper {
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Section Variants */
+.section-dark {
+  background: var(--color-hero);
+  color: white;
+}
+
+.section-cream {
+  background: var(--color-cream-100);
+}
+
+.section-gold {
+  background: var(--color-secondary-300);
+}
+
+/* Typography Utilities */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Card hover states */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }

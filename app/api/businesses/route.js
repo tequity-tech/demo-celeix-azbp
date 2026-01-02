@@ -3,6 +3,47 @@ import { nanoid } from 'nanoid';
 import slugify from 'slugify';
 import db from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
+import { CITY_COORDINATES, PHOENIX_CENTER } from '@/lib/constants/arizona-cities';
+
+/**
+ * Validates that a URL is safe (http/https only, no javascript: or data: URLs)
+ * Returns null if valid, error message if invalid
+ */
+function validateUrl(url) {
+  if (!url || url.trim() === '') return null; // Empty is OK
+
+  try {
+    const parsed = new URL(url);
+    // Only allow http and https protocols
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return 'URL must use http or https protocol';
+    }
+    return null;
+  } catch {
+    return 'Invalid URL format';
+  }
+}
+
+/**
+ * Gets approximate coordinates for a city
+ * Uses known coordinates with a small random offset to prevent stacking
+ */
+function getCityCoordinates(city) {
+  const coords = CITY_COORDINATES[city];
+  if (coords) {
+    // Add small random offset (up to ~0.5 miles) to prevent exact stacking
+    const offset = 0.007; // ~0.5 miles
+    return {
+      lat: coords.lat + (Math.random() - 0.5) * offset,
+      lng: coords.lng + (Math.random() - 0.5) * offset,
+    };
+  }
+  // Fall back to Phoenix center with offset
+  return {
+    lat: PHOENIX_CENTER.lat + (Math.random() - 0.5) * 0.1,
+    lng: PHOENIX_CENTER.lng + (Math.random() - 0.5) * 0.1,
+  };
+}
 
 export async function GET(request) {
   try {
@@ -12,10 +53,39 @@ export async function GET(request) {
     const category = searchParams.get('category');
     const city = searchParams.get('city');
     const featured = searchParams.get('featured');
-    const status = searchParams.get('status') || 'approved';
+    const requestedStatus = searchParams.get('status');
     const sort = searchParams.get('sort') || 'newest';
+    const owner = searchParams.get('owner');
 
     const offset = (page - 1) * limit;
+
+    // Get current user for authorization checks
+    const user = await getCurrentUser();
+
+    // Determine which status to filter by
+    // Only admins can view non-approved listings (unless owner=me)
+    // Only owners can view their own pending/rejected listings
+    let status = 'approved';
+    let filterByOwner = null;
+
+    if (owner === 'me') {
+      // Owner wants to see their own listings
+      if (!user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      filterByOwner = user.id;
+      // Owners can see any status of their own listings
+      status = requestedStatus || null; // null means all statuses for their listings
+    } else if (requestedStatus && requestedStatus !== 'approved') {
+      // Someone is requesting non-approved status
+      if (!user || user.role !== 'admin') {
+        // Non-admin users can only see approved listings
+        status = 'approved';
+      } else {
+        // Admin can see any status
+        status = requestedStatus;
+      }
+    }
 
     let query = `
       SELECT
@@ -34,10 +104,22 @@ export async function GET(request) {
          LIMIT 1) as logo_url
       FROM businesses b
       LEFT JOIN users u ON b.owner_id = u.id
-      WHERE b.status = ?
+      WHERE 1=1
     `;
 
-    const params = [status];
+    const params = [];
+
+    // Apply owner filter if specified
+    if (filterByOwner) {
+      query += ` AND b.owner_id = ?`;
+      params.push(filterByOwner);
+    }
+
+    // Apply status filter (if not viewing own listings with all statuses)
+    if (status) {
+      query += ` AND b.status = ?`;
+      params.push(status);
+    }
 
     if (category) {
       query += ` AND b.id IN (
@@ -74,9 +156,19 @@ export async function GET(request) {
 
     const businesses = db.prepare(query).all(...params);
 
-    // Get total count
-    let countQuery = `SELECT COUNT(*) as total FROM businesses b WHERE status = ?`;
-    const countParams = [status];
+    // Get total count - use same filters
+    let countQuery = `SELECT COUNT(*) as total FROM businesses b WHERE 1=1`;
+    const countParams = [];
+
+    if (filterByOwner) {
+      countQuery += ` AND b.owner_id = ?`;
+      countParams.push(filterByOwner);
+    }
+
+    if (status) {
+      countQuery += ` AND b.status = ?`;
+      countParams.push(status);
+    }
 
     if (category) {
       countQuery += ` AND b.id IN (
@@ -151,6 +243,15 @@ export async function POST(request) {
       );
     }
 
+    // Validate URLs to prevent XSS (javascript:, data:, etc.)
+    const websiteError = validateUrl(website);
+    if (websiteError) {
+      return NextResponse.json(
+        { error: `Website: ${websiteError}` },
+        { status: 400 }
+      );
+    }
+
     const id = nanoid();
     let slug = slugify(name, { lower: true, strict: true });
 
@@ -158,6 +259,15 @@ export async function POST(request) {
     const existing = db.prepare('SELECT id FROM businesses WHERE slug = ?').get(slug);
     if (existing) {
       slug = `${slug}-${nanoid(6)}`;
+    }
+
+    // Use provided coordinates or geocode from city
+    let finalLat = latitude;
+    let finalLng = longitude;
+    if (!finalLat || !finalLng) {
+      const coords = getCityCoordinates(city);
+      finalLat = coords.lat;
+      finalLng = coords.lng;
     }
 
     db.prepare(`
@@ -170,7 +280,7 @@ export async function POST(request) {
     `).run(
       id, user.id, name, slug, description, shortDescription,
       email, phone, website, addressLine1, addressLine2,
-      city, state, zipCode, latitude, longitude,
+      city, state, zipCode, finalLat, finalLng,
       yearEstablished, employeeCount, hoursJson ? JSON.stringify(hoursJson) : null
     );
 
@@ -184,6 +294,15 @@ export async function POST(request) {
       categoryIds.forEach((categoryId, index) => {
         insertCategory.run(id, categoryId, index === 0 ? 1 : 0);
       });
+    }
+
+    // Update FTS index for search
+    const business = db.prepare('SELECT rowid, name, description, short_description, city FROM businesses WHERE id = ?').get(id);
+    if (business) {
+      db.prepare(`
+        INSERT INTO businesses_fts (rowid, name, description, short_description, city)
+        VALUES (?, ?, ?, ?, ?)
+      `).run(business.rowid, name, description || '', shortDescription || '', city);
     }
 
     // Update user role to business_owner
