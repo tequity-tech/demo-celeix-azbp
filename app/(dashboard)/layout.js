@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { Spinner } from '@/components/ui';
 import {
-  LayoutDashboard, Store, Settings, LogOut, Menu, X, ChevronLeft
+  LayoutDashboard, Store, Settings, LogOut, Menu, X, ChevronLeft,
+  Shield, Users, ClipboardList
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
@@ -14,6 +15,12 @@ const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'My Business', href: '/business/edit', icon: Store },
   { name: 'Settings', href: '/settings', icon: Settings },
+];
+
+const adminNavItems = [
+  { name: 'Admin Panel', href: '/admin', icon: Shield },
+  { name: 'Pending Approval', href: '/admin/pending', icon: ClipboardList },
+  { name: 'All Businesses', href: '/admin/businesses', icon: Store },
 ];
 
 export default function DashboardLayout({ children }) {
@@ -74,7 +81,7 @@ export default function DashboardLayout({ children }) {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-1">
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
             {navItems.map((item) => (
               <Link
                 key={item.name}
@@ -85,6 +92,27 @@ export default function DashboardLayout({ children }) {
                 {item.name}
               </Link>
             ))}
+
+            {/* Admin Section */}
+            {user.role === 'admin' && (
+              <>
+                <div className="pt-4 mt-4 border-t border-[var(--color-neutral-200)]">
+                  <p className="px-3 text-xs font-semibold text-[var(--color-neutral-400)] uppercase tracking-wider mb-2">
+                    Admin
+                  </p>
+                </div>
+                {adminNavItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg text-[var(--color-neutral-600)] hover:bg-[var(--color-neutral-100)] hover:text-[var(--color-neutral-900)] transition-colors"
+                  >
+                    <item.icon className="w-5 h-5" />
+                    {item.name}
+                  </Link>
+                ))}
+              </>
+            )}
           </nav>
 
           {/* User & Logout */}
