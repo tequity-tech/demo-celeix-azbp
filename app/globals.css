@@ -1,8 +1,63 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primary - Rich Brown */
+  --color-primary-50: #fdf8f6;
+  --color-primary-100: #f2e8e5;
+  --color-primary-200: #eaddd7;
+  --color-primary-300: #e0cec7;
+  --color-primary-400: #d2bab0;
+  --color-primary-500: #a67c52;
+  --color-primary-600: #8b5e3c;
+  --color-primary-700: #6d4c41;
+  --color-primary-800: #5d4037;
+  --color-primary-900: #4e342e;
+
+  /* Secondary - Warm Gold */
+  --color-secondary-50: #fffdf7;
+  --color-secondary-100: #fef9e7;
+  --color-secondary-200: #fce9a6;
+  --color-secondary-300: #f9d56e;
+  --color-secondary-400: #f5c236;
+  --color-secondary-500: #d4a528;
+  --color-secondary-600: #b8860b;
+  --color-secondary-700: #9a6f09;
+  --color-secondary-800: #7d5907;
+  --color-secondary-900: #614405;
+
+  /* Accent - Deep Green */
+  --color-accent-50: #f0f7f4;
+  --color-accent-100: #d6ebe2;
+  --color-accent-200: #a8d5bf;
+  --color-accent-300: #73b898;
+  --color-accent-400: #4a9a75;
+  --color-accent-500: #2d6a4f;
+  --color-accent-600: #1e5640;
+  --color-accent-700: #174432;
+  --color-accent-800: #103324;
+  --color-accent-900: #092216;
+
+  /* Neutrals - Warm Grays */
+  --color-neutral-50: #fafaf9;
+  --color-neutral-100: #f5f5f4;
+  --color-neutral-200: #e7e5e4;
+  --color-neutral-300: #d6d3d1;
+  --color-neutral-400: #a8a29e;
+  --color-neutral-500: #78716c;
+  --color-neutral-600: #57534e;
+  --color-neutral-700: #44403c;
+  --color-neutral-800: #292524;
+  --color-neutral-900: #1c1917;
+
+  /* Semantic Colors */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Background */
+  --background: #fafaf9;
+  --foreground: #1c1917;
 }
 
 @theme inline {
@@ -10,17 +65,65 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Custom colors for Tailwind */
+  --color-primary: var(--color-primary-500);
+  --color-primary-light: var(--color-primary-300);
+  --color-primary-dark: var(--color-primary-700);
+
+  --color-secondary: var(--color-secondary-500);
+  --color-secondary-light: var(--color-secondary-300);
+  --color-secondary-dark: var(--color-secondary-700);
+
+  --color-accent: var(--color-accent-500);
+  --color-accent-light: var(--color-accent-300);
+  --color-accent-dark: var(--color-accent-700);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1c1917;
+    --foreground: #fafaf9;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-neutral-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-400);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-500);
+}
+
+/* Focus Ring */
+.focus-ring {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Leaflet Map Overrides */
+.leaflet-container {
+  font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
