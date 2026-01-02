@@ -177,64 +177,66 @@ export default async function BusinessPage({ params }) {
 
       <Container>
         {/* Business Header */}
-        <div className="relative -mt-20 mb-8">
-          <div className="flex flex-col md:flex-row gap-6 items-start">
-            {/* Logo */}
-            <div className="w-32 h-32 rounded-xl bg-white shadow-lg border-4 border-white overflow-hidden flex items-center justify-center">
-              {logoImage ? (
-                <img
-                  src={logoImage.url}
-                  alt={business.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <img
-                  src={placeholderLogo}
-                  alt={business.name}
-                  className="w-full h-full object-cover"
-                />
-              )}
-            </div>
-
-            {/* Info */}
-            <div className="flex-1 pt-4">
-              <div className="flex flex-wrap items-start gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-[var(--color-neutral-900)]">
-                  {business.name}
-                </h1>
-                {business.is_verified && (
-                  <Badge variant="accent" className="mt-1">
-                    <BadgeCheck className="w-4 h-4 mr-1" />
-                    Verified
-                  </Badge>
-                )}
-                {business.is_featured && (
-                  <Badge variant="secondary" className="mt-1">
-                    Featured
-                  </Badge>
+        <div className="relative -mt-16 mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-6 border border-[var(--color-neutral-200)]">
+            <div className="flex flex-col md:flex-row gap-6 items-start">
+              {/* Logo */}
+              <div className="w-28 h-28 rounded-xl bg-[var(--color-neutral-100)] shadow-md border-4 border-white overflow-hidden flex items-center justify-center -mt-16">
+                {logoImage ? (
+                  <img
+                    src={logoImage.url}
+                    alt={business.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src={placeholderLogo}
+                    alt={business.name}
+                    className="w-full h-full object-cover"
+                  />
                 )}
               </div>
 
-              {business.category_names && (
-                <p className="text-[var(--color-primary-500)] mb-2">
-                  {business.category_names}
-                </p>
-              )}
+              {/* Info */}
+              <div className="flex-1">
+                <div className="flex flex-wrap items-start gap-3 mb-2">
+                  <h1 className="text-2xl md:text-3xl font-bold text-[var(--color-neutral-900)]">
+                    {business.name}
+                  </h1>
+                  {business.is_verified && (
+                    <Badge variant="accent" className="mt-1">
+                      <BadgeCheck className="w-4 h-4 mr-1" />
+                      Verified
+                    </Badge>
+                  )}
+                  {business.is_featured && (
+                    <Badge variant="secondary" className="mt-1">
+                      Featured
+                    </Badge>
+                  )}
+                </div>
 
-              <div className="flex items-center gap-2 text-[var(--color-neutral-600)]">
-                <MapPin className="w-4 h-4 text-[var(--color-neutral-500)]" />
-                <span>{business.city}, {business.state}</span>
+                {business.category_names && (
+                  <p className="text-[var(--color-primary-600)] font-medium mb-2">
+                    {business.category_names}
+                  </p>
+                )}
+
+                <div className="flex items-center gap-2 text-[var(--color-neutral-600)]">
+                  <MapPin className="w-4 h-4 text-[var(--color-neutral-500)]" />
+                  <span>{business.city}, {business.state}</span>
+                </div>
               </div>
-            </div>
 
-            {/* Actions */}
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                <Share2 className="w-4 h-4 text-[var(--color-neutral-600)]" />
-              </Button>
-              <Button variant="outline" size="sm">
-                <Heart className="w-4 h-4 text-[var(--color-neutral-600)]" />
-              </Button>
+              {/* Actions */}
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">
+                  <Share2 className="w-4 h-4 text-[var(--color-neutral-600)]" />
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Heart className="w-4 h-4 text-[var(--color-neutral-600)]" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
